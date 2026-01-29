@@ -21,7 +21,7 @@ $config = new ClientConfig('YOUR_API_KEY');
 $client = new WeatherClient($config);
 
 // Create location
-$location = Location::fromSlug('london-gb');
+$location = Location::fromSlug('united-kingdom-london');
 
 // Create forecast options
 $options = ForecastOptions::create()

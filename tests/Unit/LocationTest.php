@@ -12,10 +12,10 @@ class LocationTest extends TestCase
 {
     public function testFromSlugCreatesLocationSlug()
     {
-        $location = Location::fromSlug('london-gb');
+        $location = Location::fromSlug('united-kingdom-london');
 
         $this->assertInstanceOf(LocationSlug::class, $location);
-        $this->assertEquals('london-gb', $location->getSlug());
+        $this->assertEquals('united-kingdom-london', $location->getSlug());
     }
 
     public function testFromCoordsCreatesLocationCoords()
@@ -29,10 +29,10 @@ class LocationTest extends TestCase
 
     public function testSlugToQueryParams()
     {
-        $location = new LocationSlug('london-gb');
+        $location = new LocationSlug('united-kingdom-london');
         $params = $location->toQueryParams();
 
-        $this->assertEquals(array('slug' => 'london-gb'), $params);
+        $this->assertEquals(array('slug' => 'united-kingdom-london'), $params);
     }
 
     public function testCoordsToQueryParams()
@@ -45,9 +45,9 @@ class LocationTest extends TestCase
 
     public function testSlugTrimsWhitespace()
     {
-        $location = new LocationSlug('  london-gb  ');
+        $location = new LocationSlug('  united-kingdom-london  ');
 
-        $this->assertEquals('london-gb', $location->getSlug());
+        $this->assertEquals('united-kingdom-london', $location->getSlug());
     }
 
     public function testEmptySlugThrowsException()
@@ -112,9 +112,9 @@ class LocationTest extends TestCase
 
     public function testSlugToString()
     {
-        $location = new LocationSlug('london-gb');
+        $location = new LocationSlug('united-kingdom-london');
 
-        $this->assertEquals('london-gb', (string) $location);
+        $this->assertEquals('united-kingdom-london', (string) $location);
     }
 
     public function testCoordsToString()
@@ -127,7 +127,7 @@ class LocationTest extends TestCase
 
     public function testStrictOneofSlugOnlyContainsSlug()
     {
-        $location = Location::fromSlug('london-gb');
+        $location = Location::fromSlug('united-kingdom-london');
         $params = $location->toQueryParams();
 
         $this->assertArrayHasKey('slug', $params);

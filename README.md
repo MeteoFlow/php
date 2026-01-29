@@ -26,7 +26,7 @@ $config = new ClientConfig('YOUR_API_KEY');
 $client = new WeatherClient($config);
 
 // Get current weather by location slug
-$location = Location::fromSlug('london-gb');
+$location = Location::fromSlug('united-kingdom-london');
 $response = $client->current($location);
 
 echo "Temperature: {$response->current->temperature}C\n";

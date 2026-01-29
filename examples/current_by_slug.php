@@ -19,7 +19,7 @@ $config = new ClientConfig('YOUR_API_KEY');
 $client = new WeatherClient($config);
 
 // Create location using slug (strict ONEOF - only slug is sent, no coordinates)
-$location = Location::fromSlug('london-gb');
+$location = Location::fromSlug('united-kingdom-london');
 
 try {
     // Get current weather
