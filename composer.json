@@ -1,0 +1,30 @@
+{
+    "name": "meteoflow/php",
+    "description": "PHP SDK for MeteoFlow Weather API",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["weather", "api", "meteoflow", "forecast", "sdk"],
+    "homepage": "https://github.com/meteoflow/php",
+    "require": {
+        "php": ">=5.6",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7 || ^9.0 || ^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MeteoFlow\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MeteoFlow\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable"
+}
