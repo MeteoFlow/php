@@ -14,7 +14,7 @@ class ForecastOptionsTest extends TestCase
         $options = new ForecastOptions();
 
         $this->assertNull($options->getDays());
-        $this->assertNull($options->getUnits());
+        $this->assertNull($options->getUnit());
         $this->assertNull($options->getLang());
     }
 
@@ -39,25 +39,25 @@ class ForecastOptionsTest extends TestCase
         ForecastOptions::create()->setDays(-1);
     }
 
-    public function testSetUnitsMetric()
+    public function testSetUnitMetric()
     {
-        $options = ForecastOptions::create()->setUnits(Unit::METRIC);
+        $options = ForecastOptions::create()->setUnit(Unit::METRIC);
 
-        $this->assertEquals(Unit::METRIC, $options->getUnits());
+        $this->assertEquals(Unit::METRIC, $options->getUnit());
     }
 
-    public function testSetUnitsImperial()
+    public function testSetUnitImperial()
     {
-        $options = ForecastOptions::create()->setUnits(Unit::IMPERIAL);
+        $options = ForecastOptions::create()->setUnit(Unit::IMPERIAL);
 
-        $this->assertEquals(Unit::IMPERIAL, $options->getUnits());
+        $this->assertEquals(Unit::IMPERIAL, $options->getUnit());
     }
 
-    public function testSetUnitsRejectsInvalid()
+    public function testSetUnitRejectsInvalid()
     {
         $this->expectException(ValidationException::class);
 
-        ForecastOptions::create()->setUnits('invalid');
+        ForecastOptions::create()->setUnit('invalid');
     }
 
     public function testSetLang()
@@ -85,7 +85,7 @@ class ForecastOptionsTest extends TestCase
     {
         $options = ForecastOptions::create()
             ->setDays(5)
-            ->setUnits(Unit::IMPERIAL)
+            ->setUnit(Unit::IMPERIAL)
             ->setLang('fr');
 
         $params = $options->toQueryParams();
@@ -121,12 +121,12 @@ class ForecastOptionsTest extends TestCase
     {
         $options = ForecastOptions::create()
             ->setDays(7)
-            ->setUnits(Unit::METRIC)
+            ->setUnit(Unit::METRIC)
             ->setLang('en');
 
         $this->assertInstanceOf(ForecastOptions::class, $options);
         $this->assertEquals(7, $options->getDays());
-        $this->assertEquals(Unit::METRIC, $options->getUnits());
+        $this->assertEquals(Unit::METRIC, $options->getUnit());
         $this->assertEquals('en', $options->getLang());
     }
 
@@ -135,7 +135,7 @@ class ForecastOptionsTest extends TestCase
         $options = ForecastOptions::withDays(14);
 
         $this->assertEquals(14, $options->getDays());
-        $this->assertNull($options->getUnits());
+        $this->assertNull($options->getUnit());
         $this->assertNull($options->getLang());
     }
 }
