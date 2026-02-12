@@ -11,7 +11,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use MeteoFlow\ClientConfig;
 use MeteoFlow\Location\Location;
 use MeteoFlow\Options\ForecastOptions;
-use MeteoFlow\Options\Units;
+use MeteoFlow\Options\Unit;
 use MeteoFlow\WeatherClient;
 
 // Create client configuration with your API key
@@ -26,7 +26,7 @@ $location = Location::fromCoords(51.5074, -0.1278); // London
 // Create forecast options (5 days, metric units, English language)
 $options = ForecastOptions::create()
     ->setDays(5)
-    ->setUnits(Units::METRIC)
+    ->setUnits(Unit::METRIC)
     ->setLang('en');
 
 try {

@@ -17,7 +17,7 @@ class ForecastOptions
     private $days;
 
     /**
-     * @var string|null Units::METRIC or Units::IMPERIAL
+     * @var string|null Unit::METRIC or Unit::IMPERIAL
      */
     private $units;
 
@@ -57,13 +57,13 @@ class ForecastOptions
     /**
      * Set the measurement units.
      *
-     * @param string $units Units::METRIC or Units::IMPERIAL
+     * @param string $units Unit::METRIC or Unit::IMPERIAL
      * @return $this
      * @throws ValidationException If units value is invalid
      */
     public function setUnits($units)
     {
-        if (!Units::isValid($units)) {
+        if (!Unit::isValid($units)) {
             throw ValidationException::forField('units', $units, 'must be "metric" or "imperial"');
         }
 

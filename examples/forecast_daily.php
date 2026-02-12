@@ -11,7 +11,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use MeteoFlow\ClientConfig;
 use MeteoFlow\Location\Location;
 use MeteoFlow\Options\ForecastOptions;
-use MeteoFlow\Options\Units;
+use MeteoFlow\Options\Unit;
 use MeteoFlow\WeatherClient;
 
 // Create client configuration with your API key
@@ -29,7 +29,7 @@ $location = Location::fromSlug('united-kingdom-london');
 // Create forecast options - request 14 days in imperial units
 $options = ForecastOptions::create()
     ->setDays(14)
-    ->setUnits(Units::IMPERIAL)
+    ->setUnits(Unit::IMPERIAL)
     ->setLang('en');
 
 try {

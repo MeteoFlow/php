@@ -3,9 +3,9 @@
 namespace MeteoFlow\Options;
 
 /**
- * Units constants for weather data.
+ * Unit constants for weather data.
  */
-class Units
+class Unit
 {
     /**
      * Metric units (Celsius, km/h, mm, etc.)
