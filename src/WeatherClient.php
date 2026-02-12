@@ -4,9 +4,12 @@ namespace MeteoFlow;
 
 use MeteoFlow\Exception\ApiException;
 use MeteoFlow\Exception\SerializationException;
+use MeteoFlow\Exception\ValidationException;
 use MeteoFlow\Location\Location;
 use MeteoFlow\Options\ForecastOptions;
-use MeteoFlow\Options\Units;
+use MeteoFlow\Options\Unit;
+use MeteoFlow\Response\CitiesResponse;
+use MeteoFlow\Response\CountriesResponse;
 use MeteoFlow\Response\CurrentWeatherResponse;
 use MeteoFlow\Response\DailyForecastResponse;
 use MeteoFlow\Response\HourlyForecastResponse;
@@ -32,7 +35,7 @@ class WeatherClient implements WeatherClientInterface
     /**
      * Default units for API responses.
      */
-    const DEFAULT_UNITS = Units::METRIC;
+    const DEFAULT_UNITS = Unit::METRIC;
 
     /**
      * API endpoint for current weather.
@@ -53,6 +56,21 @@ class WeatherClient implements WeatherClientInterface
      * API endpoint for daily forecast.
      */
     const ENDPOINT_FORECAST_DAILY = '/v2/forecast/by-days/';
+
+    /**
+     * API endpoint for countries list.
+     */
+    const ENDPOINT_COUNTRIES = '/v2/geography/countries/';
+
+    /**
+     * API endpoint for cities by country.
+     */
+    const ENDPOINT_CITIES_BY_COUNTRY = '/v2/geography/countries/cities/';
+
+    /**
+     * API endpoint for city search.
+     */
+    const ENDPOINT_SEARCH = '/v2/geography/search/';
 
     /**
      * @var ClientConfig
@@ -122,6 +140,53 @@ class WeatherClient implements WeatherClientInterface
         $data = $this->request(self::ENDPOINT_FORECAST_DAILY, $params);
 
         return DailyForecastResponse::fromArray($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countries()
+    {
+        $data = $this->request(self::ENDPOINT_COUNTRIES, array());
+
+        return CountriesResponse::fromArray($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function citiesByCountry($countryCode)
+    {
+        if (!is_string($countryCode) || trim($countryCode) === '') {
+            throw ValidationException::forField('country_code', $countryCode, 'must be a non-empty string');
+        }
+
+        $data = $this->request(self::ENDPOINT_CITIES_BY_COUNTRY, array('country_code' => $countryCode));
+
+        return CitiesResponse::fromArray($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function searchCities($query, $limit = null)
+    {
+        if (!is_string($query) || trim($query) === '') {
+            throw ValidationException::forField('q', $query, 'must be a non-empty string');
+        }
+
+        $params = array('q' => $query);
+
+        if ($limit !== null) {
+            if (!is_int($limit) || $limit < 1) {
+                throw ValidationException::forField('limit', $limit, 'must be a positive integer');
+            }
+            $params['limit'] = $limit;
+        }
+
+        $data = $this->request(self::ENDPOINT_SEARCH, $params);
+
+        return CitiesResponse::fromArray($data);
     }
 
     /**

@@ -4,7 +4,7 @@ namespace MeteoFlow\Tests\Unit;
 
 use MeteoFlow\Exception\ValidationException;
 use MeteoFlow\Options\ForecastOptions;
-use MeteoFlow\Options\Units;
+use MeteoFlow\Options\Unit;
 use PHPUnit\Framework\TestCase;
 
 class ForecastOptionsTest extends TestCase
@@ -41,16 +41,16 @@ class ForecastOptionsTest extends TestCase
 
     public function testSetUnitsMetric()
     {
-        $options = ForecastOptions::create()->setUnits(Units::METRIC);
+        $options = ForecastOptions::create()->setUnits(Unit::METRIC);
 
-        $this->assertEquals(Units::METRIC, $options->getUnits());
+        $this->assertEquals(Unit::METRIC, $options->getUnits());
     }
 
     public function testSetUnitsImperial()
     {
-        $options = ForecastOptions::create()->setUnits(Units::IMPERIAL);
+        $options = ForecastOptions::create()->setUnits(Unit::IMPERIAL);
 
-        $this->assertEquals(Units::IMPERIAL, $options->getUnits());
+        $this->assertEquals(Unit::IMPERIAL, $options->getUnits());
     }
 
     public function testSetUnitsRejectsInvalid()
@@ -85,7 +85,7 @@ class ForecastOptionsTest extends TestCase
     {
         $options = ForecastOptions::create()
             ->setDays(5)
-            ->setUnits(Units::IMPERIAL)
+            ->setUnits(Unit::IMPERIAL)
             ->setLang('fr');
 
         $params = $options->toQueryParams();
@@ -121,12 +121,12 @@ class ForecastOptionsTest extends TestCase
     {
         $options = ForecastOptions::create()
             ->setDays(7)
-            ->setUnits(Units::METRIC)
+            ->setUnits(Unit::METRIC)
             ->setLang('en');
 
         $this->assertInstanceOf(ForecastOptions::class, $options);
         $this->assertEquals(7, $options->getDays());
-        $this->assertEquals(Units::METRIC, $options->getUnits());
+        $this->assertEquals(Unit::METRIC, $options->getUnits());
         $this->assertEquals('en', $options->getLang());
     }
 

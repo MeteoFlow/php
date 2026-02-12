@@ -5,6 +5,8 @@ namespace MeteoFlow;
 use MeteoFlow\Exception\MeteoFlowException;
 use MeteoFlow\Location\Location;
 use MeteoFlow\Options\ForecastOptions;
+use MeteoFlow\Response\CitiesResponse;
+use MeteoFlow\Response\CountriesResponse;
 use MeteoFlow\Response\CurrentWeatherResponse;
 use MeteoFlow\Response\DailyForecastResponse;
 use MeteoFlow\Response\HourlyForecastResponse;
@@ -55,4 +57,31 @@ interface WeatherClientInterface
      * @throws MeteoFlowException On any error
      */
     public function forecastDaily(Location $location, ForecastOptions $options = null);
+
+    /**
+     * Get the list of all supported countries.
+     *
+     * @return CountriesResponse
+     * @throws MeteoFlowException On any error
+     */
+    public function countries();
+
+    /**
+     * Get all cities for a given country code.
+     *
+     * @param string $countryCode ISO 3166-1 alpha-2 country code (e.g. "GB", "RU")
+     * @return CitiesResponse
+     * @throws MeteoFlowException On any error
+     */
+    public function citiesByCountry($countryCode);
+
+    /**
+     * Search cities by name.
+     *
+     * @param string $query Search query
+     * @param int|null $limit Maximum number of results
+     * @return CitiesResponse
+     * @throws MeteoFlowException On any error
+     */
+    public function searchCities($query, $limit = null);
 }

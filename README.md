@@ -35,12 +35,22 @@ echo "Description: {$response->current->description}\n";
 
 ## API Methods
 
+### Weather
+
 | Method                                 | Description           |
 |----------------------------------------|-----------------------|
 | `current($location)`                   | Get current weather   |
 | `forecastHourly($location, $options)`  | Get hourly forecast   |
 | `forecast3Hourly($location, $options)` | Get 3-hourly forecast |
 | `forecastDaily($location, $options)`   | Get daily forecast    |
+
+### Geography
+
+| Method                          | Description                        |
+|---------------------------------|------------------------------------|
+| `countries()`                   | List all supported countries       |
+| `citiesByCountry($countryCode)` | List cities for a country code     |
+| `searchCities($query, $limit)`  | Search cities by name              |
 
 ## Location
 
@@ -65,11 +75,11 @@ Use `ForecastOptions` to customize forecast requests:
 
 ```php
 use MeteoFlow\Options\ForecastOptions;
-use MeteoFlow\Options\Units;
+use MeteoFlow\Options\Unit;
 
 $options = ForecastOptions::create()
     ->setDays(7)                    // Number of days (>= 1)
-    ->setUnits(Units::METRIC)       // 'metric' or 'imperial'
+    ->setUnits(Unit::METRIC)        // 'metric' or 'imperial'
     ->setLang('en');                // BCP-47 language code
 
 $response = $client->forecastDaily($location, $options);
@@ -197,6 +207,40 @@ foreach ($response->daily as $day) {
 }
 ```
 
+### Geography Responses
+
+```php
+// List all countries
+$response = $client->countries();
+
+foreach ($response->countries as $country) {
+    $country->slug;  // e.g. "united-kingdom"
+    $country->name;  // e.g. "United Kingdom"
+    $country->code;  // ISO 3166-1 alpha-2, e.g. "GB"
+}
+
+// Cities by country code
+$response = $client->citiesByCountry('DE');
+
+foreach ($response->cities as $city) {
+    $city->slug;           // e.g. "germany-berlin"
+    $city->name;           // City name
+    $city->country;        // Country name
+    $city->countryCode;    // Country code
+    $city->region;         // Region / state name
+    $city->lat;            // Latitude
+    $city->lon;            // Longitude
+    $city->timezoneOffset; // UTC offset in minutes
+}
+
+// Search cities by name (limit is optional)
+$response = $client->searchCities('Berlin', 5);
+
+foreach ($response->cities as $city) {
+    // Same fields as above
+}
+```
+
 ## Error Handling
 
 The SDK throws typed exceptions for different error scenarios:
@@ -269,11 +313,17 @@ $client = new WeatherClient($config, new MyCustomTransport());
 
 See the [examples](examples/) directory for complete usage examples:
 
+**Weather**
 - [Current weather by slug](examples/current_by_slug.php)
 - [Current weather by coordinates](examples/current_by_coords.php)
 - [Hourly forecast](examples/forecast_hourly.php)
 - [3-hourly forecast](examples/forecast_3hourly.php)
 - [Daily forecast](examples/forecast_daily.php)
+
+**Geography**
+- [List all countries](examples/geography_countries.php)
+- [Cities by country](examples/geography_cities_by_country.php)
+- [Search cities](examples/geography_search.php)
 
 ## Testing
 
@@ -295,7 +345,7 @@ The SDK is designed to work with PHP 5.6 and higher:
 
 This SDK is designed as a standalone package. For framework-specific integrations:
 
-- **Laravel**: See `meteoflow/laravel` (coming soon)
+- **Laravel**: See [meteoflow/laravel](https://github.com/meteoflow/laravel)
 - **Symfony**: See `meteoflow/symfony` (coming soon)
 
 The SDK provides `HttpTransportInterface` as an extension point for custom transport implementations.
