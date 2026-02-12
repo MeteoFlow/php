@@ -26,7 +26,7 @@ $location = Location::fromSlug('united-kingdom-london');
 // Create forecast options
 $options = ForecastOptions::create()
     ->setDays(3)
-    ->setUnits(Unit::METRIC)
+    ->setUnit(Unit::METRIC)
     ->setLang('en');
 
 try {

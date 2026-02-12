@@ -19,7 +19,7 @@ class ForecastOptions
     /**
      * @var string|null Unit::METRIC or Unit::IMPERIAL
      */
-    private $units;
+    private $unit;
 
     /**
      * @var string|null BCP-47 language code (en, ru, de, etc.)
@@ -55,19 +55,19 @@ class ForecastOptions
     }
 
     /**
-     * Set the measurement units.
+     * Set the measurement unit.
      *
-     * @param string $units Unit::METRIC or Unit::IMPERIAL
+     * @param string $unit Unit::METRIC or Unit::IMPERIAL
      * @return $this
-     * @throws ValidationException If units value is invalid
+     * @throws ValidationException If unit value is invalid
      */
-    public function setUnits($units)
+    public function setUnit($unit)
     {
-        if (!Unit::isValid($units)) {
-            throw ValidationException::forField('units', $units, 'must be "metric" or "imperial"');
+        if (!Unit::isValid($unit)) {
+            throw ValidationException::forField('unit', $unit, 'must be "metric" or "imperial"');
         }
 
-        $this->units = $units;
+        $this->unit = $unit;
 
         return $this;
     }
@@ -101,13 +101,13 @@ class ForecastOptions
     }
 
     /**
-     * Get the measurement units.
+     * Get the measurement unit.
      *
      * @return string|null
      */
-    public function getUnits()
+    public function getUnit()
     {
-        return $this->units;
+        return $this->unit;
     }
 
     /**
@@ -135,8 +135,8 @@ class ForecastOptions
             $params['days'] = $this->days;
         }
 
-        if ($this->units !== null) {
-            $params['units'] = $this->units;
+        if ($this->unit !== null) {
+            $params['units'] = $this->unit;
         }
 
         if ($this->lang !== null) {

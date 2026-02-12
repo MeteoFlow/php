@@ -26,7 +26,7 @@ $location = Location::fromCoords(51.5074, -0.1278); // London
 // Create forecast options (5 days, metric units, English language)
 $options = ForecastOptions::create()
     ->setDays(5)
-    ->setUnits(Unit::METRIC)
+    ->setUnit(Unit::METRIC)
     ->setLang('en');
 
 try {

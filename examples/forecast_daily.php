@@ -29,7 +29,7 @@ $location = Location::fromSlug('united-kingdom-london');
 // Create forecast options - request 14 days in imperial units
 $options = ForecastOptions::create()
     ->setDays(14)
-    ->setUnits(Unit::IMPERIAL)
+    ->setUnit(Unit::IMPERIAL)
     ->setLang('en');
 
 try {

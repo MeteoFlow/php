@@ -79,7 +79,7 @@ use MeteoFlow\Options\Unit;
 
 $options = ForecastOptions::create()
     ->setDays(7)                    // Number of days (>= 1)
-    ->setUnits(Unit::METRIC)        // 'metric' or 'imperial'
+    ->setUnit(Unit::METRIC)        // 'metric' or 'imperial'
     ->setLang('en');                // BCP-47 language code
 
 $response = $client->forecastDaily($location, $options);
