@@ -44,6 +44,13 @@ echo "Description: {$response->current->description}\n";
 | `forecast3Hourly($location, $options)` | Get 3-hourly forecast |
 | `forecastDaily($location, $options)`   | Get daily forecast    |
 
+### Air Quality & Geomagnetic
+
+| Method                            | Description                      |
+|-----------------------------------|----------------------------------|
+| `airQuality($location, $options)` | Get air quality by days (max 8)  |
+| `geomagnetic($location)`          | Get geomagnetic activity by days |
+
 ### Geography
 
 | Method                          | Description                        |
@@ -100,6 +107,28 @@ When options are not specified, the SDK uses these defaults:
 | days   | 7       |
 | units  | metric  |
 | lang   | en      |
+
+## Air Quality Options
+
+Use `AirQualityOptions` to customize air quality requests:
+
+```php
+use MeteoFlow\Options\AirQualityOptions;
+
+$options = AirQualityOptions::create()
+    ->setDays(6); // Number of days (1..8)
+
+$response = $client->airQuality($location, $options);
+```
+
+## Geomagnetic Options
+
+Geomagnetic endpoint does not support options (no `days`, `units`, or `lang`).
+Use only location:
+
+```php
+$response = $client->geomagnetic($location);
+```
 
 ## Configuration
 
@@ -210,6 +239,34 @@ foreach ($response->daily as $day) {
     $day->iconUrl;            // Weather icon URL
     $day->uvIndex;            // UV index value
     $day->uvDescription;      // UV description
+}
+```
+
+### AirQualityResponse
+
+```php
+$response = $client->airQuality($location, $options);
+
+foreach ($response->items as $item) {
+    $item->time;                 // Time (ISO 8601)
+    $item->particulateMatter2;   // PM2.5
+    $item->particulateMatter10;  // PM10
+    $item->carbonMonoxide;       // CO
+    $item->sulphurDioxide;       // SO2
+    $item->nitrogenDioxide;      // NO2
+    $item->ozone;                // O3
+    $item->aqi;                  // Air quality index
+}
+```
+
+### GeomagneticResponse
+
+```php
+$response = $client->geomagnetic($location);
+
+foreach ($response->items as $item) {
+    $item->time;     // Time (ISO 8601)
+    $item->valueMax; // Max value for the day
 }
 ```
 
@@ -331,6 +388,10 @@ See the [examples](examples/) directory for complete usage examples:
 - [List all countries](examples/geography_countries.php)
 - [Cities by country](examples/geography_cities_by_country.php)
 - [Search cities](examples/geography_search.php)
+
+**Air Quality & Geomagnetic**
+- [Air quality by days](examples/air_quality.php)
+- [Geomagnetic activity by days](examples/geomagnetic.php)
 
 ## Testing
 

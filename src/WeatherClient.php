@@ -6,12 +6,15 @@ use MeteoFlow\Exception\ApiException;
 use MeteoFlow\Exception\SerializationException;
 use MeteoFlow\Exception\ValidationException;
 use MeteoFlow\Location\Location;
+use MeteoFlow\Options\AirQualityOptions;
 use MeteoFlow\Options\ForecastOptions;
 use MeteoFlow\Options\Unit;
+use MeteoFlow\Response\AirQualityResponse;
 use MeteoFlow\Response\CitiesResponse;
 use MeteoFlow\Response\CountriesResponse;
 use MeteoFlow\Response\CurrentWeatherResponse;
 use MeteoFlow\Response\DailyForecastResponse;
+use MeteoFlow\Response\GeomagneticResponse;
 use MeteoFlow\Response\HourlyForecastResponse;
 use MeteoFlow\Response\ThreeHourlyForecastResponse;
 use MeteoFlow\Transport\CurlTransport;
@@ -36,6 +39,11 @@ class WeatherClient implements WeatherClientInterface
      * Default units for API responses.
      */
     const DEFAULT_UNITS = Unit::METRIC;
+
+    /**
+     * Default number of air quality days.
+     */
+    const DEFAULT_AIR_DAYS = 7;
 
     /**
      * API endpoint for current weather.
@@ -71,6 +79,16 @@ class WeatherClient implements WeatherClientInterface
      * API endpoint for city search.
      */
     const ENDPOINT_SEARCH = '/v2/geography/search/';
+
+    /**
+     * API endpoint for geomagnetic by days.
+     */
+    const ENDPOINT_GEOMAGNETIC = '/v2/geomagnetic/by-days/';
+
+    /**
+     * API endpoint for air quality by days.
+     */
+    const ENDPOINT_AIR_QUALITY = '/v2/air/by-days/';
 
     /**
      * @var ClientConfig
@@ -190,6 +208,30 @@ class WeatherClient implements WeatherClientInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function geomagnetic(Location $location)
+    {
+        $params = $this->buildLocationParams($location);
+
+        $data = $this->request(self::ENDPOINT_GEOMAGNETIC, $params);
+
+        return GeomagneticResponse::fromArray($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function airQuality(Location $location, AirQualityOptions $options = null)
+    {
+        $params = $this->buildAirQualityParams($location, $options);
+
+        $data = $this->request(self::ENDPOINT_AIR_QUALITY, $params);
+
+        return AirQualityResponse::fromArray($data);
+    }
+
+    /**
      * Build query parameters from location.
      *
      * @param Location $location
@@ -228,6 +270,29 @@ class WeatherClient implements WeatherClientInterface
 
         if (!isset($params['units'])) {
             $params['units'] = self::DEFAULT_UNITS;
+        }
+
+        return $params;
+    }
+
+    /**
+     * Build query parameters for air quality requests.
+     *
+     * @param Location $location
+     * @param AirQualityOptions|null $options
+     * @return array
+     */
+    private function buildAirQualityParams(Location $location, AirQualityOptions $options = null)
+    {
+        $params = $location->toQueryParams();
+
+        if ($options !== null) {
+            $optionParams = $options->toQueryParams();
+            $params = array_merge($params, $optionParams);
+        }
+
+        if (!isset($params['days'])) {
+            $params['days'] = self::DEFAULT_AIR_DAYS;
         }
 
         return $params;

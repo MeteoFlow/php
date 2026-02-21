@@ -5,6 +5,8 @@ namespace MeteoFlow\Tests\Unit;
 use MeteoFlow\Response\CurrentWeatherResponse;
 use MeteoFlow\Response\DailyForecastResponse;
 use MeteoFlow\Response\HourlyForecastResponse;
+use MeteoFlow\Response\AirQualityResponse;
+use MeteoFlow\Response\GeomagneticResponse;
 use MeteoFlow\Response\ThreeHourlyForecastResponse;
 use PHPUnit\Framework\TestCase;
 
@@ -493,6 +495,50 @@ class ResponseParsingTest extends TestCase
         $this->assertNull($response->current->humidity);
 
         $this->assertNull($response->astronomy);
+    }
+
+    public function testAirQualityResponseParsing()
+    {
+        $data = array(
+            array(
+                'time' => '2026-02-21T00:00:00Z',
+                'particulate_matter2' => 9.755592942237854,
+                'particulate_matter10' => 11.19826990365982,
+                'carbon_monoxide' => 205.49472045898438,
+                'sulphur_dioxide' => 5.048967957496643,
+                'nitrogen_dioxide' => 8.713798999786377,
+                'ozone' => 80.78177118301392,
+                'aqi' => 135,
+            ),
+        );
+
+        $response = AirQualityResponse::fromArray($data);
+
+        $this->assertCount(1, $response->items);
+        $this->assertEquals('2026-02-21T00:00:00Z', $response->items[0]->time);
+        $this->assertEquals(9.755592942237854, $response->items[0]->particulateMatter2);
+        $this->assertEquals(11.19826990365982, $response->items[0]->particulateMatter10);
+        $this->assertEquals(205.49472045898438, $response->items[0]->carbonMonoxide);
+        $this->assertEquals(5.048967957496643, $response->items[0]->sulphurDioxide);
+        $this->assertEquals(8.713798999786377, $response->items[0]->nitrogenDioxide);
+        $this->assertEquals(80.78177118301392, $response->items[0]->ozone);
+        $this->assertEquals(135, $response->items[0]->aqi);
+    }
+
+    public function testGeomagneticResponseParsing()
+    {
+        $data = array(
+            array(
+                'time' => '2026-02-21T00:00:00Z',
+                'value_max' => 4,
+            ),
+        );
+
+        $response = GeomagneticResponse::fromArray($data);
+
+        $this->assertCount(1, $response->items);
+        $this->assertEquals('2026-02-21T00:00:00Z', $response->items[0]->time);
+        $this->assertEquals(4, $response->items[0]->valueMax);
     }
 
     public function testNestedObjectsParsing()

@@ -4,13 +4,16 @@ namespace MeteoFlow;
 
 use MeteoFlow\Exception\MeteoFlowException;
 use MeteoFlow\Location\Location;
+use MeteoFlow\Options\AirQualityOptions;
 use MeteoFlow\Options\ForecastOptions;
 use MeteoFlow\Response\CitiesResponse;
 use MeteoFlow\Response\CountriesResponse;
 use MeteoFlow\Response\CurrentWeatherResponse;
 use MeteoFlow\Response\DailyForecastResponse;
+use MeteoFlow\Response\GeomagneticResponse;
 use MeteoFlow\Response\HourlyForecastResponse;
 use MeteoFlow\Response\ThreeHourlyForecastResponse;
+use MeteoFlow\Response\AirQualityResponse;
 
 /**
  * Interface for the MeteoFlow Weather API client.
@@ -84,4 +87,23 @@ interface WeatherClientInterface
      * @throws MeteoFlowException On any error
      */
     public function searchCities($query, $limit = null);
+
+    /**
+     * Get geomagnetic activity for a location.
+     *
+     * @param Location $location Location (slug, coordinates, or IP)
+     * @return GeomagneticResponse
+     * @throws MeteoFlowException On any error
+     */
+    public function geomagnetic(Location $location);
+
+    /**
+     * Get air quality forecast for a location.
+     *
+     * @param Location $location Location (slug, coordinates, or IP)
+     * @param AirQualityOptions|null $options Air quality options (days up to 8)
+     * @return AirQualityResponse
+     * @throws MeteoFlowException On any error
+     */
+    public function airQuality(Location $location, AirQualityOptions $options = null);
 }
