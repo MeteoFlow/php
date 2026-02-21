@@ -54,8 +54,8 @@ echo "Description: {$response->current->description}\n";
 
 ## Location
 
-The SDK uses a strict ONEOF pattern for locations. You can specify a location either by slug or by coordinates, but not
-both:
+The SDK uses a strict ONEOF pattern for locations. You can specify a location by slug, coordinates, or IP address, but
+not more than one at a time:
 
 ### By Slug
 
@@ -67,6 +67,12 @@ $location = Location::fromSlug('united-kingdom-london');
 
 ```php
 $location = Location::fromCoords(51.5074, -0.1278);
+```
+
+### By IP Address
+
+```php
+$location = Location::fromIp('8.8.8.8');
 ```
 
 ## Forecast Options
@@ -316,6 +322,7 @@ See the [examples](examples/) directory for complete usage examples:
 **Weather**
 - [Current weather by slug](examples/current_by_slug.php)
 - [Current weather by coordinates](examples/current_by_coords.php)
+- [Current weather by IP](examples/current_by_ip.php)
 - [Hourly forecast](examples/forecast_hourly.php)
 - [3-hourly forecast](examples/forecast_3hourly.php)
 - [Daily forecast](examples/forecast_daily.php)
