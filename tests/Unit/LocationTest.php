@@ -5,6 +5,7 @@ namespace MeteoFlow\Tests\Unit;
 use MeteoFlow\Exception\ValidationException;
 use MeteoFlow\Location\Location;
 use MeteoFlow\Location\LocationCoords;
+use MeteoFlow\Location\LocationIp;
 use MeteoFlow\Location\LocationSlug;
 use PHPUnit\Framework\TestCase;
 
@@ -35,6 +36,14 @@ class LocationTest extends TestCase
         $this->assertEquals(array('slug' => 'united-kingdom-london'), $params);
     }
 
+    public function testIpToQueryParams()
+    {
+        $location = new LocationIp('8.8.8.8');
+        $params = $location->toQueryParams();
+
+        $this->assertEquals(array('ip' => '8.8.8.8'), $params);
+    }
+
     public function testCoordsToQueryParams()
     {
         $location = new LocationCoords(51.5074, -0.1278);
@@ -50,6 +59,21 @@ class LocationTest extends TestCase
         $this->assertEquals('united-kingdom-london', $location->getSlug());
     }
 
+    public function testIpTrimsWhitespace()
+    {
+        $location = new LocationIp('  8.8.8.8  ');
+
+        $this->assertEquals('8.8.8.8', $location->getIp());
+    }
+
+    public function testFromIpCreatesLocationIp()
+    {
+        $location = Location::fromIp('8.8.8.8');
+
+        $this->assertInstanceOf(LocationIp::class, $location);
+        $this->assertEquals('8.8.8.8', $location->getIp());
+    }
+
     public function testEmptySlugThrowsException()
     {
         $this->expectException(ValidationException::class);
@@ -62,6 +86,20 @@ class LocationTest extends TestCase
         $this->expectException(ValidationException::class);
 
         new LocationSlug('   ');
+    }
+
+    public function testEmptyIpThrowsException()
+    {
+        $this->expectException(ValidationException::class);
+
+        new LocationIp('');
+    }
+
+    public function testInvalidIpThrowsException()
+    {
+        $this->expectException(ValidationException::class);
+
+        new LocationIp('999.999.999.999');
     }
 
     public function testInvalidLatitudeTooLowThrowsException()
@@ -117,6 +155,13 @@ class LocationTest extends TestCase
         $this->assertEquals('united-kingdom-london', (string) $location);
     }
 
+    public function testIpToString()
+    {
+        $location = new LocationIp('8.8.8.8');
+
+        $this->assertEquals('8.8.8.8', (string) $location);
+    }
+
     public function testCoordsToString()
     {
         $location = new LocationCoords(51.5074, -0.1278);
@@ -133,6 +178,7 @@ class LocationTest extends TestCase
         $this->assertArrayHasKey('slug', $params);
         $this->assertArrayNotHasKey('lat', $params);
         $this->assertArrayNotHasKey('lon', $params);
+        $this->assertArrayNotHasKey('ip', $params);
     }
 
     public function testStrictOneofCoordsOnlyContainsLatLon()
@@ -143,5 +189,17 @@ class LocationTest extends TestCase
         $this->assertArrayHasKey('lat', $params);
         $this->assertArrayHasKey('lon', $params);
         $this->assertArrayNotHasKey('slug', $params);
+        $this->assertArrayNotHasKey('ip', $params);
+    }
+
+    public function testStrictOneofIpOnlyContainsIp()
+    {
+        $location = Location::fromIp('8.8.8.8');
+        $params = $location->toQueryParams();
+
+        $this->assertArrayHasKey('ip', $params);
+        $this->assertArrayNotHasKey('slug', $params);
+        $this->assertArrayNotHasKey('lat', $params);
+        $this->assertArrayNotHasKey('lon', $params);
     }
 }

@@ -22,7 +22,7 @@ interface WeatherClientInterface
     /**
      * Get current weather for a location.
      *
-     * @param Location $location Location (slug or coordinates)
+     * @param Location $location Location (slug, coordinates, or IP)
      * @return CurrentWeatherResponse
      * @throws MeteoFlowException On any error
      */
@@ -31,7 +31,7 @@ interface WeatherClientInterface
     /**
      * Get hourly forecast for a location.
      *
-     * @param Location $location Location (slug or coordinates)
+     * @param Location $location Location (slug, coordinates, or IP)
      * @param ForecastOptions|null $options Forecast options (days, units, lang)
      * @return HourlyForecastResponse
      * @throws MeteoFlowException On any error
@@ -41,7 +41,7 @@ interface WeatherClientInterface
     /**
      * Get 3-hourly forecast for a location.
      *
-     * @param Location $location Location (slug or coordinates)
+     * @param Location $location Location (slug, coordinates, or IP)
      * @param ForecastOptions|null $options Forecast options (days, units, lang)
      * @return ThreeHourlyForecastResponse
      * @throws MeteoFlowException On any error
@@ -51,7 +51,7 @@ interface WeatherClientInterface
     /**
      * Get daily forecast for a location.
      *
-     * @param Location $location Location (slug or coordinates)
+     * @param Location $location Location (slug, coordinates, or IP)
      * @param ForecastOptions|null $options Forecast options (days, units, lang)
      * @return DailyForecastResponse
      * @throws MeteoFlowException On any error

@@ -8,6 +8,7 @@ namespace MeteoFlow\Location;
  * Location follows a strict ONEOF pattern - it can be either:
  * - LocationSlug: identified by a slug string
  * - LocationCoords: identified by latitude and longitude
+ * - LocationIp: identified by an IP address
  *
  * Use the static factory methods to create instances.
  */
@@ -41,5 +42,16 @@ abstract class Location
     public static function fromCoords($lat, $lon)
     {
         return new LocationCoords($lat, $lon);
+    }
+
+    /**
+     * Create a location from an IP address.
+     *
+     * @param string $ip
+     * @return LocationIp
+     */
+    public static function fromIp($ip)
+    {
+        return new LocationIp($ip);
     }
 }
